@@ -1,0 +1,195 @@
+- table:
+    schema: public
+    name: Account_Status
+  array_relationships:
+  - name: Users
+    using:
+      foreign_key_constraint_on:
+        column: account_status
+        table:
+          schema: public
+          name: User
+- table:
+    schema: public
+    name: Article
+  object_relationships:
+  - name: User
+    using:
+      foreign_key_constraint_on: author
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - title
+      - message
+      - created_timestamp
+      - edited_timestamp
+      - id
+      - author
+      backend_only: false
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - message
+      - title
+      - created_timestamp
+      - edited_timestamp
+      - author
+      - id
+      backend_only: false
+  select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+      - author
+      - created_timestamp
+      - edited_timestamp
+      - id
+      - message
+      - title
+      filter: {}
+  - role: moderator
+    permission:
+      columns:
+      - message
+      - title
+      - created_timestamp
+      - edited_timestamp
+      - author
+      - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - message
+      - title
+      - created_timestamp
+      - edited_timestamp
+      - author
+      - id
+      filter: {}
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - message
+      - title
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+      - message
+      - title
+      filter:
+        author:
+          _eq: X-Hasura-User-Id
+      check: null
+  delete_permissions:
+  - role: moderator
+    permission:
+      filter: {}
+  - role: user
+    permission:
+      filter:
+        author:
+          _eq: X-Hasura-User-Id
+- table:
+    schema: public
+    name: Role
+  array_relationships:
+  - name: Users
+    using:
+      foreign_key_constraint_on:
+        column: role
+        table:
+          schema: public
+          name: User
+- table:
+    schema: public
+    name: User
+  object_relationships:
+  - name: Account_Status
+    using:
+      foreign_key_constraint_on: account_status
+  - name: Role
+    using:
+      foreign_key_constraint_on: role
+  array_relationships:
+  - name: Articles
+    using:
+      foreign_key_constraint_on:
+        column: author
+        table:
+          schema: public
+          name: Article
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - account_status
+      - email
+      - first_name
+      - last_name
+      - role
+      - created_timestamp
+      - id
+      backend_only: false
+  select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+      - account_status
+      - created_timestamp
+      - first_name
+      - id
+      - last_name
+      - role
+      filter: {}
+  - role: moderator
+    permission:
+      columns:
+      - account_status
+      - email
+      - first_name
+      - last_name
+      - role
+      - created_timestamp
+      - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - account_status
+      - created_timestamp
+      - email
+      - first_name
+      - id
+      - last_name
+      - role
+      filter: {}
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - account_status
+      - email
+      - first_name
+      - id
+      - last_name
+      - role
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+      - email
+      - first_name
+      - last_name
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
