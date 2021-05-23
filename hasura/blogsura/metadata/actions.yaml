@@ -1,16 +1,6 @@
-actions:
-- name: Login
-  definition:
-    kind: ""
-    handler: http://localhost:3000/login
-    forward_client_headers: true
-    headers:
-    - name: x-admin-secret-key
-      value_from_env: ADMIN_SECRET
+actions: []
 custom_types:
   enums: []
-  input_objects:
-  - name: LoginInput
-  objects:
-  - name: LoginOutput
+  input_objects: []
+  objects: []
   scalars: []
