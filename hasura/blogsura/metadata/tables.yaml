@@ -20,6 +20,8 @@
   - role: moderator
     permission:
       check: {}
+      set:
+        author: x-hasura-User-Id
       columns:
       - title
       - message
@@ -31,6 +33,8 @@
   - role: user
     permission:
       check: {}
+      set:
+        author: x-hasura-User-Id
       columns:
       - message
       - title
@@ -78,6 +82,8 @@
       - title
       filter: {}
       check: null
+      set:
+        edited_timestamp: now()
   - role: user
     permission:
       columns:
@@ -87,6 +93,8 @@
         author:
           _eq: X-Hasura-User-Id
       check: null
+      set:
+        edited_timestamp: now()
   delete_permissions:
   - role: moderator
     permission:
