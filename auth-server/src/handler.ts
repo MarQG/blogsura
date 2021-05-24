@@ -49,11 +49,9 @@ const processUserToJWT = (user: LoginOutput) => {
 // /login
 // Takes an email parameter and returns a jwt token if a user is found. Otherwise it will return an error.
 // Input: Content-Type: application/x-www-form-urlencoded email=youremail@email.com
-// Responses:
+// Responses: JWT Token || error : string
 app.post('/login', async (req: Request, res: Response) => {
-  if (req.body.email === undefined) return res.status(400).json({
-    "error": `email is required: ${req.body.email}`
-  });
+  if (req.body.email === undefined) return res.status(400).send(`email is required: ${req.body.email}`);
   // get request input
   const params: LoginArgs = req.body;
   // execute the parent operation in Hasura
@@ -63,7 +61,7 @@ app.post('/login', async (req: Request, res: Response) => {
 
   if(data?.User === undefined) return res.status(400).send("Unexpected error. Try again.");
 
-  if(data.User.length === 0) return res.status(404).send("Unable to find user");
+  if(data.User.length === 0) return res.status(400).send("Unable to find user");
 
   const profile = data.User[0];
 
